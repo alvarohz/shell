@@ -95,10 +95,39 @@ void destruirComando()
  */
 void manejarComandoUsuario()
 {
+	if ((checkBuiltInCommands(comandoArgv[0])) == 0) {
         crearProceso(comandoArgv);
+	}
 }
 
+/**
+ * comandos incorporados: exit, in, out, bg, fg, jobs, kill
+ * returns 	1 if a built-in command is executed,
+ * 			0 otherwise
+ */
+int checkBuiltInCommands()
+{
 
+        if (strcmp("cd", comandoArgv[0]) == 0) {
+                cambiarDirectorio();
+                return 1;
+        }
+        return 0;
+}
+
+/**
+ * cambia el directorio actual
+ */
+void cambiarDirectorio()
+{
+        if (comandoArgv[1] == NULL) {
+                chdir(getenv("HOME"));            // simula un comando "cd"
+        } else {
+                if (chdir(comandoArgv[1]) == -1) {     // ir al nuevo directorio
+                        printf(" %s: no such directory\n", comandoArgv[1]);
+                }
+        }
+}
 /**
  * ejecuta un programa
  */
@@ -128,3 +157,6 @@ void crearProceso(char *comando[])
                 break;
         }
 }
+
+
+

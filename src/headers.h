@@ -60,3 +60,5 @@ void ejecutarComando(char *comando[]);
 void crearProceso(char *comando[]);
 /* inicializa el shell */
 void init();
+int checkBuiltInCommands();
+void cambiarDirectorio();
