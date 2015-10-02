@@ -25,12 +25,11 @@ void init()
         SHELL_PID = getpid();    // retorna el pid del shell
         SHELL_TERMINAL = STDIN_FILENO;     // terminal = STDIN
         SHELL_ES_INTERACTIVO = isatty(SHELL_TERMINAL); // el shell es interactivo si STDIN es el terminal
-        //isatty - test whether a file descriptor refers to a terminal
-        /*STDIN_FILENO is a macro defined in <unistd.h>.
-         * At least for a POSIX compliant system, it's not just "almost certainly 0";
-         * it's required to be defined as 0.
-        /STDIN_FILENO is the default standard input file descriptor number which is 0.
-        It is essentially a defined directive for general use*/
+        //isatty - testea si el descriptor de archivo refiere a el terminal
+        /*STDIN_FILENO es una macro definida en <unistd.h>.
+         * Al menos para sistemas compatibles con POSIX,  es requerido que sea 0
+        /STDIN_FILENO es el descriptor de archivo de entrada estandar por defecto el cual es 0
+         * es esencialmente una directiva definida como cero*/
         if (SHELL_ES_INTERACTIVO) {     // es el shell interactivo?
         } else {
                 printf("No es posible hacer el shell interactivo. Saliendo..\n");
@@ -57,18 +56,18 @@ void getLineaTexto()
 }
 
 /**
- * rellena el array commandArgv con todas las palabras
+ * rellena el array comandoArgv con todas las palabras
  * de la linea de comandos (un espacio  " " es usado como separador)
  */
 void rellenarComando()
 {
         char* pbuffer;            // un puntero al buffer
         pbuffer = strtok(buffer, " ");
-        /*The C library function char *strtok(char *str, const char *delim)
-         * breaks string str into a series of tokens using the delimiter delim.*/
+        /*La funcion de la libreria de C char *strtok(char *str, const char *delim)
+        * divide la cadena str en una serie de tokens usando el delimitador delim*/
 
         while (pbuffer != NULL) {   // mientras el puntero no sea NULL
-                comandoArgv[comandoArgc] = pbuffer;   // rellenar el array commandArgv
+                comandoArgv[comandoArgc] = pbuffer;   // rellenar el array comandoArgv
                 pbuffer = strtok(NULL, " "); // Posteriores llamadas
                 comandoArgc++;
         }
@@ -81,9 +80,9 @@ void destruirComando()
 {
         while (comandoArgc != 0) {
                 comandoArgv[comandoArgc] = NULL;  // elimina el puntero a la cadena
-                comandoArgc--;                                                                       // decrement the number of words in the command line
+                comandoArgc--;        // decrementa el numero de las palabras en la linea
         }
-        bufferChars = 0;                                                                          // erase the number of chars in the buffer
+        bufferChars = 0;              // reinicia el conteo de chars en el buffer
 }
 
 /*********************************************************************
@@ -95,17 +94,16 @@ void destruirComando()
  */
 void manejarComandoUsuario()
 {
-	if ((checkBuiltInCommands(comandoArgv[0])) == 0) {
+	if ((verificarComandosBuiltIn(comandoArgv[0])) == 0) {
         crearProceso(comandoArgv);
 	}
 }
 
 /**
- * comandos incorporados: exit, in, out, bg, fg, jobs, kill
- * returns 	1 if a built-in command is executed,
- * 			0 otherwise
+ * comandos incorporados:
+ * retorna 1 si un comando built-in es ejecutado de lo contrario 0
  */
-int checkBuiltInCommands()
+int verificarComandosBuiltIn()
 {
 
         if (strcmp("cd", comandoArgv[0]) == 0) {
@@ -120,6 +118,9 @@ int checkBuiltInCommands()
  */
 void cambiarDirectorio()
 {
+	//chdir -> Cambia el directorio actual de trabajo
+	//getenv -> Retorna una cadena conteniendo el valor de la variable de entorno cuyo nombre es
+	//especificado como argumento
         if (comandoArgv[1] == NULL) {
                 chdir(getenv("HOME"));            // simula un comando "cd"
         } else {
@@ -138,7 +139,7 @@ void ejecutarComando(char *comando[])
 }
 
 /**
- * crear un proceso con fork and ejecutar un programa hijo
+ * crear un proceso con fork y ejecuta un programa hijo
  */
 void crearProceso(char *comando[])
 {

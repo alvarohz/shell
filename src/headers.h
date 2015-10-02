@@ -1,15 +1,12 @@
 #include <unistd.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <sys/select.h>
-
 #define TRUE 1
 #define FALSE !TRUE
 
@@ -60,5 +57,5 @@ void ejecutarComando(char *comando[]);
 void crearProceso(char *comando[]);
 /* inicializa el shell */
 void init();
-int checkBuiltInCommands();
+int verificarComandosBuiltIn();
 void cambiarDirectorio();
